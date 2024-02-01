@@ -1,53 +1,37 @@
-#include "main.h"
+#include "holberton.h"
+
 /**
- * main : is entry point to print char & strings & %
- *
- * return : the numbers of printed items
- *
- **/
+ *  * _printf - Receives the main string and all the necessary parameters to
+ *   * print a formated string
+ *    * @format: A string containing all the desired characters
+ *     * Return: A total count of the characters printed
+ *      */
 int _printf(const char *format, ...)
 {
-	int i = 0;
+		int printed_chars;
+			conver_t f_list[] = {
+						{"c", print_char},
+								{"s", print_string},
+										{"%", print_percent},
+												{"d", print_integer},
+														{"i", print_integer},
+																{"b", print_binary},
+																		{"r", print_reversed},
+																				{"R", rot13},
+																						{"u", unsigned_integer},
+																								{"o", print_octal},
+																										{"x", print_hex},
+																												{"X", print_heX},
+																														{NULL, NULL}
+							};
+				va_list arg_list;
 
-	va_list args;
+					if (format == NULL)
+								return (-1);
 
-	va_start(args, format);
-
-	while (*format != '\0')
-	{
-		if (*format != '%')
-		{
-			putchar(*format);
-			i++;
-		}
-		else
-		{
-			switch (*++format)
-			{
-				case 'c':
-					i += fprintf(stdout, "%c", va_arg(args, int));
-					break;
-				case 's':
-					i += fprintf(stdout, "%s", va_arg(args, char *));
-					break;
-				default:
-					putchar(*format);
-					i += 2;
-					break;
-			}
-		}
-		format++;
-	}
-	va_end(args);
-	return (i);
-}
-int main()
-{
-printf("the value of char is %c\n", 'x');
-_printf("the value of char is %c\n", 'x');
-printf("the value of string is %s\n", "hello");
-_printf("the value of string is %s\n", "hello");
-printf("the value of percentage is %% \n");
-_printf("the value of percentage is %% \n");
-return (0);
+						va_start(arg_list, format);
+							/*Calling parser function*/
+							printed_chars = parser(format, f_list, arg_list);
+								va_end(arg_list);
+									return (printed_chars);
 }
